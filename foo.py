@@ -5,6 +5,7 @@ class Episode:
     def __init__(self):
         self.title = ""
         self.link = ""
+        self.schwurbel = ""
 
 
 def parse_feed(file):
@@ -22,14 +23,17 @@ def parse_feed(file):
             if child.tag == 'link':
                 episode.link = child.text
 
-            if child.tag == '{http://purl.org/rss/1.0/modules/content/}encoded':
-                if child.text and "Schwurbel" in child.text:
-                    # print(child.text)
-                    pass
+            if child.tag == '{http://purl.org/rss/1.0/modules/content/}encoded' and "Schwurbel" in child.text:
+                episode.schwurbel = extract_schwurbel(child.text)
 
-        episodes.append(episode)
+        if episode.schwurbel:
+            episodes.append(episode)
 
     return episodes
+
+
+def extract_schwurbel(text):
+    return text
 
 
 def main():
@@ -38,6 +42,7 @@ def main():
     for episode in episodes:
         print(f"Title: {episode.title}")
         print(f"Link: {episode.link}")
+        print(f"Schwurbel: {episode.schwurbel}")
         print('=========================')
 
 
