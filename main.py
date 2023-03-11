@@ -1,4 +1,5 @@
 import xml.etree.cElementTree as et
+import requests
 
 
 class Episode:
@@ -6,6 +7,13 @@ class Episode:
         self.title = ""
         self.link = ""
         self.schwurbel = ""
+
+
+def load_rss(url, file):
+    response = requests.get(url)
+
+    with open(file, 'wb') as f:
+        f.write(response.content)
 
 
 def parse_feed(file):
@@ -48,6 +56,7 @@ def main():
     print('<body>')
     print('<h1>Schwurbel</h1>')
 
+    load_rss('https://minkorrekt.podigee.io/feed/mp3', './feed.xml')
     episodes = parse_feed('./feed.xml')
     episodes.reverse()
     for episode in episodes:
