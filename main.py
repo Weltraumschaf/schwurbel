@@ -23,7 +23,7 @@ def parse_feed(file):
             if child.tag == 'link':
                 episode.link = child.text
 
-            if child.tag == '{http://purl.org/rss/1.0/modules/content/}encoded' and "Schwurbel" in child.text:
+            if child.tag == '{http://purl.org/rss/1.0/modules/content/}encoded':
                 episode.schwurbel = extract_schwurbel(child.text)
 
         if episode.schwurbel:
