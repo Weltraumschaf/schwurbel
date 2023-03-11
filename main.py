@@ -33,17 +33,29 @@ def parse_feed(file):
 
 
 def extract_schwurbel(text):
-    return text
+    for line in text.splitlines():
+        if 'Schwurbel der Woche:' in line.strip():
+            return line + '\n'
 
 
 def main():
-    episodes = parse_feed('./feed.xml')
+    print('<!DOCTYPE html>')
+    print('<html lang="en">')
+    print('<head>')
+    print('<meta charset="UTF-8">')
+    print('<title>Schwurbel</title>')
+    print('</head>')
+    print('<body>')
+    print('<h1>Schwurbel</h1>')
 
+    episodes = parse_feed('./feed.xml')
+    episodes.reverse()
     for episode in episodes:
-        print(f"Title: {episode.title}")
-        print(f"Link: {episode.link}")
-        print(f"Schwurbel: {episode.schwurbel}")
-        print('=========================')
+        print(f'<h2><a href="{episode.link}">{episode.title}</a></h2>')
+        print(f"{episode.schwurbel}")
+
+    print('</body>')
+    print('</html>')
 
 
 if __name__ == "__main__":
