@@ -1,3 +1,5 @@
+import os
+import shutil
 import xml.etree.cElementTree as et
 import requests
 
@@ -47,28 +49,37 @@ def extract_schwurbel(text):
 
 
 def render_html(episodes):
-    print('<!DOCTYPE html>')
-    print('<html lang="en">')
-    print('<head>')
-    print('<meta charset="UTF-8">')
-    print('<title>Schwurbel</title>')
-    print('</head>')
-    print('<body>')
-    print('<h1>Schwurbel</h1>')
+    html = '<!DOCTYPE html>'
+    html += '<html lang="en">'
+    html += '<head>'
+    html += '<meta charset="UTF-8">'
+    html += '<title>Schwurbel</title>'
+    html += '</head>'
+    html += '<body>'
+    html += '<h1>Schwurbel</h1>'
 
     for episode in episodes:
-        print(f'<h2><a href="{episode.link}">{episode.title}</a></h2>')
-        print(f"{episode.schwurbel}")
+        html += f'<h2><a href="{episode.link}">{episode.title}</a></h2>'
+        html += f"{episode.schwurbel}"
 
-    print('</body>')
-    print('</html>')
+    html += '</body>'
+    html += '</html>'
+    return html
 
 
 def main():
-    load_rss('https://minkorrekt.podigee.io/feed/mp3', './feed.xml')
-    episodes = parse_feed('./feed.xml')
+    shutil.rmtree('./target')
+
+    if not os.path.exists('./target'):
+        os.makedirs('./target')
+
+    load_rss('https://minkorrekt.podigee.io/feed/mp3', './target/feed.xml')
+    episodes = parse_feed('./target/feed.xml')
     episodes.reverse()
-    render_html(episodes)
+    html = render_html(episodes)
+
+    with open('./target/schwurbel.html', 'w') as f:
+        f.write(html)
 
 
 if __name__ == "__main__":
