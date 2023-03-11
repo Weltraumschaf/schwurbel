@@ -46,7 +46,7 @@ def extract_schwurbel(text):
             return line + '\n'
 
 
-def main():
+def render_html(episodes):
     print('<!DOCTYPE html>')
     print('<html lang="en">')
     print('<head>')
@@ -56,15 +56,19 @@ def main():
     print('<body>')
     print('<h1>Schwurbel</h1>')
 
-    load_rss('https://minkorrekt.podigee.io/feed/mp3', './feed.xml')
-    episodes = parse_feed('./feed.xml')
-    episodes.reverse()
     for episode in episodes:
         print(f'<h2><a href="{episode.link}">{episode.title}</a></h2>')
         print(f"{episode.schwurbel}")
 
     print('</body>')
     print('</html>')
+
+
+def main():
+    load_rss('https://minkorrekt.podigee.io/feed/mp3', './feed.xml')
+    episodes = parse_feed('./feed.xml')
+    episodes.reverse()
+    render_html(episodes)
 
 
 if __name__ == "__main__":
