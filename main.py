@@ -68,17 +68,18 @@ def render_html(episodes):
 
 
 def main():
-    shutil.rmtree('./target')
+    build_dir = './target'
+    shutil.rmtree(build_dir)
 
-    if not os.path.exists('./target'):
-        os.makedirs('./target')
+    if not os.path.exists(build_dir):
+        os.makedirs(build_dir)
 
-    load_rss('https://minkorrekt.podigee.io/feed/mp3', './target/feed.xml')
-    episodes = parse_feed('./target/feed.xml')
+    load_rss('https://minkorrekt.podigee.io/feed/mp3', f'{build_dir}/feed.xml')
+    episodes = parse_feed(f'{build_dir}/feed.xml')
     episodes.reverse()
     html = render_html(episodes)
 
-    with open('./target/schwurbel.html', 'w') as f:
+    with open(f'{build_dir}/schwurbel.html', 'w') as f:
         f.write(html)
 
 
